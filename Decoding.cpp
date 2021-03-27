@@ -1,8 +1,3 @@
-//  Temat: "Kodowanie Huffmanna"
-//  Decoding.cpp
-//  Created by Karolina Bryś on 22/11/2020.
-/** @file */
-
 #include "Files_decoding.h"
 using namespace std;
 
@@ -18,13 +13,13 @@ void load_encoded_reference_book(string input_file, string reference_book_file, 
     {
         while (file)
         {
-            file >> loaded_character >> loaded_colon >> loaded_code; // Wczytanie poszczególnych kluczy słownika z podanego pliku.
+            file >> loaded_character >> loaded_colon >> loaded_code;
             if(loaded_character == ':')
             {
                 loaded_code = loaded_colon + loaded_code;
                 loaded_character = ' ';
             }
-            reference_book[loaded_code] = loaded_character; // Zapis wczytanego klucza do mapy.
+            reference_book[loaded_code] = loaded_character;
             if (file.eof()) break;
         }
     }
@@ -42,7 +37,7 @@ void load_encoded_text(string input_file, map<string,char>&reference_book, strin
     {
         while (file)
         {
-            file >> loaded_text; // Wczytanie zakodowanego tekstu.
+            file >> loaded_text;
             if (file.eof()) break;
         }
     }
@@ -54,9 +49,9 @@ void load_encoded_text(string input_file, map<string,char>&reference_book, strin
 
 void decode(string loaded_text, map<string,char>&reference_book, string output_file)
 {
-    list<char> coded_text(loaded_text.begin(), loaded_text.end()); // Zamiana wczytanego tekstu na tablicę char.
+    list<char> coded_text(loaded_text.begin(), loaded_text.end());
     char character;
-    size_t coded_text_size = loaded_text.length(); // Wczytanie długości tablicy.
+    size_t coded_text_size = loaded_text.length();
     
     int counter=0;
     string to_compare;
@@ -65,17 +60,17 @@ void decode(string loaded_text, map<string,char>&reference_book, string output_f
     file.open(output_file);
     while(counter<coded_text_size)
     {
-        character = coded_text.front(); // Dodanie znaku do zmiennej do_porownania.
+        character = coded_text.front();
         to_compare.push_back(character);
-        coded_text.pop_front(); // Usunięcie pierwszego znaku z listy.
+        coded_text.pop_front();
         if(reference_book.find(to_compare) == reference_book.end())
         {
-            counter++; // Sprawdzenie czy zawartość zmiennej do_porownania znajduje się w słowniku .... jeżeli nie -> inkrementacja k.
+            counter++;
         }
         else
         {
-            file << reference_book.find(to_compare)->second; // .... jeżeli tak -> zapisanie do pliku wyjściowego odpowiedniego znaku przypisanego do klucza ze zmiennej do_porownania (ze słownika).
-            to_compare.clear(); // Wyczyszczenie zmiennej do_porownania.
+            file << reference_book.find(to_compare)->second;
+            to_compare.clear();
             counter++;
         }
     }

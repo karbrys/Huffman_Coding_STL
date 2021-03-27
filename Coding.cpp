@@ -1,8 +1,3 @@
-//  Temat: "Kodowanie Huffmanna"
-//  Coding.cpp
-//  Created by Karolina Bryś on 22/11/2020.
-/** @file */
-
 #include "Files_coding.h"
 using namespace std;
 
@@ -10,24 +5,24 @@ void create_huffman_tree(multimap<int,char>&character_inverted, size_t text_size
 {
     shared_ptr<Huffman_node> left_temp, right_temp, top;
 
-    priority_queue<shared_ptr<Huffman_node>, vector<shared_ptr<Huffman_node>>, Compare  > minimal_node; // Utworzenie kolejki priorytetowej, w której będą zawierały się poszczególne elementy odwróconej mapy ze slownikiem.
+    priority_queue<shared_ptr<Huffman_node>, vector<shared_ptr<Huffman_node>>, Compare  > minimal_node;
     
     for (auto const &pair: character_inverted)
     {
-        minimal_node.push(make_shared<Huffman_node>(pair.second,pair.first)); // Zapisanie do kolejki priorytetoerj kolejnych elementow odwróconej mapy ze słownikiem.
+        minimal_node.push(make_shared<Huffman_node>(pair.second,pair.first));
     }
     
     while (minimal_node.size() != 1)
     {
-        left_temp = minimal_node.top(); // Ustawienie pierwszego elementu kolejki jako lewy_.
-        minimal_node.pop(); // Wyciągnięcie z kolejki aktualnego pierwszego elementu.
-        right_temp = minimal_node.top(); // Ustawienie nowego pierwszego elemntu kolejki jako prawy_.
-        minimal_node.pop(); // Wyciągnięcie z kolejki aktualnego pierwszego elementu.
+        left_temp = minimal_node.top();
+        minimal_node.pop();
+        right_temp = minimal_node.top();
+        minimal_node.pop();
         
-        top = make_shared<Huffman_node>('$', left_temp->frequency + right_temp->frequency); // Stworzenie nowego węzła drzewa, ustawienie wartości   ilosc_wystapien jako sumy ilości wystapień węzła lewego (lewy_) i prawego (prawy_).
+        top = make_shared<Huffman_node>('$', left_temp->frequency + right_temp->frequency);
         top->left = left_temp;
         top->right = right_temp;
-        minimal_node.push(top); // Wstawienie powstałych węzłów to kolejki priorytetowej w odpowiednim miejscu.
+        minimal_node.push(top);
     }
     open_output_file(reference_book_file, minimal_node.top(), text_size, text, output_file);
 }
@@ -44,7 +39,7 @@ void open_output_file(string reference_book_file, shared_ptr<Huffman_node> root,
 
 void write_code(ofstream &file, shared_ptr<Huffman_node> root, string code, list<char>&text, size_t text_size)
 {
-    if (root) //Zapis kodu powstałego przez przechodzenie przez drzewo Huffmana do nowego pliku.
+    if (root)
     {
         if(root->character != '$')
         {
@@ -67,13 +62,13 @@ void load_reference_book(list<char>&text, size_t text_size, string reference_boo
     {
         while (file)
         {
-            file >> loaded_character >> loaded_colon >> loaded_code; // Wczytanie poszczególnych kluczy słownika z pliku.
+            file >> loaded_character >> loaded_colon >> loaded_code;
             if(loaded_character == ':')
             {
                 loaded_code = loaded_colon + loaded_code;
                 loaded_character = ' ';
             }
-            reference_book_temp[loaded_character] = loaded_code; // Zapis wczytanego klucza do mapy.
+            reference_book_temp[loaded_character] = loaded_code;
             if (file.eof()) break;
         }
     }
@@ -91,15 +86,15 @@ void encode_text(list<char>&text, size_t text_size, map<char,string>&reference_b
     ofstream file;
     file.open(output_file);
     
-    while(counter<text_size) // Zakodowanie tekstu wejściowego i zapisanie go do pliku wyjściowego.
+    while(counter<text_size)
     {
-        file << reference_book_temp.find(character_to_compare)->second; // Odnalezienie odpowiedniego klucza.
+        file << reference_book_temp.find(character_to_compare)->second;
         counter++;
         character_to_compare = text.front();
         text_size_temp--;
         if(text_size_temp != 0)
         {
-            text.pop_front(); // Usunięcie pierwszego znaku z listy.
+            text.pop_front(); 
         }
     }
     file.close();

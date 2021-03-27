@@ -1,8 +1,3 @@
-//  Temat: "Kodowanie Huffmanna"
-//  Arguments.cpp
-//  Created by Karolina Bryś on 22/11/2020.
-/** @file */
-
 #include "Arguments.h"
 using namespace std;
 
